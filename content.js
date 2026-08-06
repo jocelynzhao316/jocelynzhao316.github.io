@@ -1,85 +1,14 @@
-/*
-  EDIT THIS FILE TO UPDATE YOUR WEBSITE.
-
-  Change text inside quotation marks. To add another project, copy one complete
-  project block (from { through },) and change its contents. GitHub will
-  republish the site automatically after you commit your edits.
-*/
-
-const portfolio = {
-  name: "Jocelyn Zhao",
-  roles: "Student · Engineer · Researcher",
-  introduction:
-    "I'm a high school student interested in robotics, computational research, and building thoughtful solutions to real-world problems.",
-
-  projects: [
-    {
-      title: "Strategic Forgetting in Changing Markets",
-      label: "Research · Computational Modeling",
-      description:
-        "A simulation-based study of how much historical information an investor should retain when market conditions change. The project combines random walks, parameter sweeps, analytical modeling, and data visualization.",
-      tags: ["Python", "Simulation", "Statistical Analysis"],
-    },
-    {
-      title: "Robotics Design & Engineering",
-      label: "FRC Robotics · Mechanical Design",
-      description:
-        "Designing mechanisms for a competition robot through iterative CAD, prototyping, testing, and cross-functional collaboration. Currently serving as a design lead for the upcoming season.",
-      tags: ["CAD", "Prototyping", "Team Leadership"],
-    },
-    {
-      title: "Computers in Biophysics & Robotics",
-      label: "UC Davis COSMOS · Summer 2026",
-      description:
-        "Explored how computation can model physical and biological systems, connecting programming, probability, and robotics through collaborative projects and experiments.",
-      tags: ["Computational Science", "Robotics", "Research"],
-    },
-  ],
-
-  aboutLead:
-    "I enjoy working where engineering, computation, and human curiosity meet.",
-  aboutParagraphs: [
-    "My work ranges from mechanical design for FRC robotics to computational research on decision-making in changing systems. I care about understanding why something works—not only making it work—and communicating that reasoning clearly.",
-    "Outside the classroom and workshop, I am a U.S. Figure Skating Gold Medalist. A decade on the ice has shaped how I approach difficult work: with patience, precision, and consistency.",
-  ],
-
-  contactIntro:
-    "I'm always interested in learning from other students, researchers, and engineers.",
-  email: "jocelyn.zhao.316@gmail.com",
-  github: "https://github.com/jocelynzhao316",
+/* EDIT THIS FILE TO UPDATE THE WORDING ON EVERY PAGE. */
+const content={
+  home:{eyebrow:"Hi, I'm",title:"Jocelyn Zhao.",intro:"I'm a high school student exploring how engineering, research, creativity, and leadership can turn ideas into meaningful work.",note:"My interests span robotics, computational research, figure skating, and business."},
+  research:{number:"01",title:"Research",intro:"I use computation and data to study questions about decision-making, technology, and society.",items:[{meta:"Computational Modeling · 2026",title:"Strategic Forgetting in Changing Markets",body:"How much of the past should an investor remember when a market keeps changing? I explored this question through random-walk simulations, parameter sweeps, analytical modeling, and data visualization.",tags:["Python","Simulation","Statistics"]},{meta:"Social Science Research",title:"AI Exposure and First-Generation Women in STEM",body:"An ongoing data-driven research project examining how occupational exposure to artificial intelligence relates to the experiences of first-generation immigrant women in STEM.",tags:["Data Analysis","Economics","AI & Society"]}]},
+  skating:{number:"02",title:"Figure Skating",intro:"Ten years on the ice have taught me patience, precision, resilience, and the value of incremental progress.",items:[{meta:"U.S. Figure Skating",title:"Gold Medalist",body:"After years of training and testing, I passed the senior-level test and earned U.S. Figure Skating Gold Medalist recognition. Skating continues to shape how I approach difficult goals—one deliberate repetition at a time.",tags:["Discipline","Performance","Long-Term Growth"]}]},
+  robotics:{number:"03",title:"Robotics",intro:"I enjoy turning open-ended challenges into mechanisms that can be built, tested, and improved.",items:[{meta:"FRC Robotics · Mechanical Design",title:"Design Lead",body:"I design competition-robot mechanisms through CAD, prototyping, testing, and close collaboration with other subteams. As design lead, I help move ideas from an early concept toward a reliable system.",tags:["CAD","Prototyping","Team Leadership"]},{meta:"UC Davis COSMOS · 2026",title:"Computers in Biophysics & Robotics",body:"I explored how computation can model physical and biological systems, connecting programming, probability, and robotics through collaborative projects and experiments.",tags:["Robotics","Computation","Research"]}]},
+  deca:{number:"04",title:"DECA",intro:"DECA gives me a space to practice clear communication, structured problem-solving, and business thinking.",items:[{meta:"Business & Entrepreneurship",title:"Learning Through Competition",body:"Through DECA, I work on presenting ideas under pressure, analyzing business situations, and developing practical recommendations. This page will grow as I add future projects, events, and results.",tags:["Presentation","Strategy","Entrepreneurship"]}]}
 };
-
-document.querySelector("#name").textContent = portfolio.name;
-document.querySelector("#roles").textContent = portfolio.roles;
-document.querySelector("#introduction").textContent = portfolio.introduction;
-document.querySelector("#about-lead").textContent = portfolio.aboutLead;
-document.querySelector("#contact-intro").textContent = portfolio.contactIntro;
-document.querySelector("#copyright").textContent = `© ${new Date().getFullYear()} ${portfolio.name}`;
-
-const emailLink = document.querySelector("#email-link");
-emailLink.href = `mailto:${portfolio.email}`;
-const githubLink = document.querySelector("#github-link");
-githubLink.href = portfolio.github;
-
-const projectList = document.querySelector("#project-list");
-portfolio.projects.forEach((project, index) => {
-  const article = document.createElement("article");
-  article.className = "project";
-  const number = String(index + 1).padStart(2, "0");
-  article.innerHTML = `
-    <div class="project-meta"><span>${number}</span><p>${project.label}</p></div>
-    <div class="project-body">
-      <h3>${project.title}</h3><p>${project.description}</p>
-      <ul class="tag-list" aria-label="${project.title} skills">
-        ${project.tags.map((tag) => `<li>${tag}</li>`).join("")}
-      </ul>
-    </div>`;
-  projectList.appendChild(article);
-});
-
-const aboutCopy = document.querySelector("#about-copy");
-portfolio.aboutParagraphs.forEach((paragraph) => {
-  const p = document.createElement("p");
-  p.textContent = paragraph;
-  aboutCopy.appendChild(p);
-});
+const links=[['Home','index.html'],['Research','research.html'],['Figure Skating','figure-skating.html'],['Robotics','robotics.html'],['DECA','deca.html']];
+const page=document.body.dataset.page;
+document.querySelector('#site-header').innerHTML=`<nav class="nav"><a class="wordmark" href="index.html">JZ</a><button class="menu-button" aria-expanded="false" aria-controls="nav-links">Menu</button><div class="nav-links" id="nav-links">${links.map(([name,url])=>`<a href="${url}"${url.startsWith(page==='home'?'index':page==='skating'?'figure':page)?' aria-current="page"':''}>${name}</a>`).join('')}</div></nav>`;
+const nav=document.querySelector('#nav-links'),button=document.querySelector('.menu-button');button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')==='true';button.setAttribute('aria-expanded',String(!open));nav.classList.toggle('open',!open)});
+if(page==='home'){const c=content.home;document.querySelector('#page-content').innerHTML=`<section class="home-hero"><p class="eyebrow">${c.eyebrow}</p><h1>${c.title}</h1><p class="home-intro">${c.intro}</p><p class="home-note">${c.note}</p><a class="text-link" href="research.html">Explore my work <span>→</span></a></section>`}else{const c=content[page];document.querySelector('#page-content').innerHTML=`<header class="page-hero"><p class="section-number">${c.number}</p><h1>${c.title}</h1><p>${c.intro}</p></header><section class="entries">${c.items.map(item=>`<article class="entry"><p class="entry-meta">${item.meta}</p><div><h2>${item.title}</h2><p>${item.body}</p><ul>${item.tags.map(tag=>`<li>${tag}</li>`).join('')}</ul></div></article>`).join('')}</section>`}
+document.querySelector('#site-footer').innerHTML=`<div class="footer"><p>© ${new Date().getFullYear()} Jocelyn Zhao</p><div><a href="mailto:jocelyn.zhao.316@gmail.com">Email</a><a href="https://github.com/jocelynzhao316" target="_blank" rel="noreferrer">GitHub</a></div></div>`;
