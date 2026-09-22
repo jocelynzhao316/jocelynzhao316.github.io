@@ -17,6 +17,7 @@
 .history-panel h3{font-size:24px;margin:8px 0;letter-spacing:-.02em}
 .history-panel p{line-height:1.6;font-size:14px}
 .history-panel button,.journey-buttons button{border:1px solid #647d73;background:#173b39;color:#f3eedf;border-radius:8px;padding:10px 14px;cursor:pointer}
+.history-panel.era-popup{position:fixed;z-index:30;bottom:24px;right:24px;width:min(380px,calc(100vw - 32px));box-shadow:0 20px 80px #0009;max-height:70vh;overflow:auto}
 .journey-panel{padding:24px 0;font-size:13px;line-height:1.6;color:#baccbf}
 .journey-panel h2{color:#f0e6d0;font-size:24px}
 .journey-panel label{display:block;margin:20px 0}
