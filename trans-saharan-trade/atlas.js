@@ -132,12 +132,12 @@ renderYear=function(value){
   document.querySelector('#eraDate').textContent=eras[idx][0]+' CE';
   document.querySelector('#eraTitle').textContent=eras[idx][1];
   document.querySelector('#eraText').textContent=eras[idx][2];
-  if(lastEra!==-1 && playing)setPlaying(false);
+  if(lastEra!==-1 && playing){setPlaying(false);panel.classList.add('era-popup');}
   lastEra=idx;
  }
  journeyGroup.querySelectorAll('[data-leg]').forEach(el=>{const leg=legs[Number(el.dataset.leg)];el.style.opacity=document.querySelector('#showAllJourneys').checked?'0.8':year>=leg.year?'0.9':'0';});
 };
-document.querySelector('#continueEra').onclick=()=>setPlaying(true);
+document.querySelector('#continueEra').onclick=()=>{panel.classList.remove('era-popup');setPlaying(true);};
 document.querySelector('#showAllJourneys').onchange=()=>renderYear(slider.value);
 // Give each year time to be noticed; historical cards automatically pause playback.
 const originalSetPlaying=setPlaying;
@@ -154,3 +154,5 @@ dialog.addEventListener('close',()=>mapViewport.classList.remove('market-zoom'))
 document.querySelector('.map-legend').innerHTML='<span><i class="legend-line"></i>Caravan trade</span><span><i class="legend-river"></i>Rivers (simplified)</span><span>Colored routes: Ibn Battuta</span>';
 document.querySelector('.source-caution').innerHTML='Geography: <a href="https://www.naturalearthdata.com/about/terms-of-use/">Natural Earth</a>, public-domain 1:110m geographic data; entire mainland and Madagascar shown without modern borders. Minor islands below this map scale are omitted. Rivers and historical route connections are simplified. Artificial empire shapes have been removed; dated cards explain changes in power. Journeys: <a href="https://sourcebooks.web.fordham.edu/source/1354-ibnbattuta.asp">Ibn Battuta’s translated account</a>, <a href="https://sourcebooks.web.fordham.edu/source/ibnbattuta-africa14C.asp">East African account</a>, and <a href="https://orias.berkeley.edu/resources-teachers/travels-ibn-battuta">UC Berkeley ORIAS</a>. Sources disagree on some dates, notably East Africa. Only documented major legs and identifiable stops are plotted, not every overnight halt. The group’s Moroccan diplomat source is Leo Africanus, writing after 1450; it is later comparative evidence, not Ibn Battuta’s account.';
 renderYear(slider.value);
+// Trade connections are illustrative, not invented opening dates.
+document.querySelectorAll('.routes path').forEach(p=>p.classList.remove('active-route'));
