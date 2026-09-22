@@ -3,7 +3,7 @@
 :root{--ink:#f3eedf;--muted:#a9b9b3;--night:#071e24;--night-2:#0d2b31;--sand:#e2c27d;--gold:#f3b33f;--orange:#e86c32;--teal:#7eb9a5;--line:rgba(238,230,207,.16);--shadow:0 24px 70px rgba(0,0,0,.35)}
 *{box-sizing:border-box}
 /* Geographic atlas revision: keep the whole continent visible at every screen size. */
-.hero{grid-template-columns:minmax(230px,.55fr) minmax(620px,1.5fr);align-items:start}
+.hero{grid-template-columns:minmax(230px,.55fr) minmax(620px,1.5fr);align-items:start!important}
 .map-viewport{aspect-ratio:800/760!important;min-height:0!important}
 .map-viewport svg{width:100%!important;height:100%!important;transform:none!important}
 .map-controls{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;margin:0 0 12px}
