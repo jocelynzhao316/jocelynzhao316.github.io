@@ -2,6 +2,31 @@
 
 :root{--ink:#f3eedf;--muted:#a9b9b3;--night:#071e24;--night-2:#0d2b31;--sand:#e2c27d;--gold:#f3b33f;--orange:#e86c32;--teal:#7eb9a5;--line:rgba(238,230,207,.16);--shadow:0 24px 70px rgba(0,0,0,.35)}
 *{box-sizing:border-box}
+/* Geographic atlas revision: keep the whole continent visible at every screen size. */
+.hero{grid-template-columns:minmax(230px,.55fr) minmax(620px,1.5fr);align-items:start}
+.map-viewport{aspect-ratio:800/760!important;min-height:0!important}
+.map-viewport svg{width:100%!important;height:100%!important;transform:none!important}
+.map-controls{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;margin:0 0 12px}
+.map-viewport{overflow:visible!important;margin-bottom:112px}
+.map-legend{bottom:8px!important;flex-direction:row!important;flex-wrap:wrap}
+.market text{font-size:9px!important;stroke-width:3px!important}
+.geo-labels text{fill:#c7d5b7;font:11px DM Mono;letter-spacing:.12em;text-anchor:middle;paint-order:stroke;stroke:#203c35;stroke-width:1.5px}
+.geo-labels text:first-child,.geo-labels text:nth-child(2){fill:#614821;stroke:#d8bd7c}
+.history-panel{background:#f0e6d0;color:#17312f;border-radius:16px;padding:24px;margin-top:18px;border-left:5px solid #e86c32}
+.history-panel .eyebrow{color:#95501c;margin-bottom:8px}
+.history-panel h3{font-size:24px;margin:8px 0;letter-spacing:-.02em}
+.history-panel p{line-height:1.6;font-size:14px}
+.history-panel button,.journey-buttons button{border:1px solid #647d73;background:#173b39;color:#f3eedf;border-radius:8px;padding:10px 14px;cursor:pointer}
+.journey-panel{padding:24px 0;font-size:13px;line-height:1.6;color:#baccbf}
+.journey-panel h2{color:#f0e6d0;font-size:24px}
+.journey-panel label{display:block;margin:20px 0}
+.journey-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.journey-buttons button{text-align:left;font-size:11px}
+.journey-buttons button[aria-pressed=true]{background:#345c53;outline:2px solid #f3b33f}
+.route-stops{font-size:12px;color:#dfc987}
+.ibn-routes{pointer-events:none}
+@media(max-width:1050px){.hero{grid-template-columns:1fr}}
+@media(max-width:700px){.journey-buttons{grid-template-columns:1fr}.map-legend{font-size:8px!important;padding:5px!important}.history-panel{padding:18px}.map-controls{margin-top:8px}.map-viewport{margin-bottom:112px}.hero-copy{display:block}}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--night);color:var(--ink);font-family:Manrope,system-ui,sans-serif}
 button,a,input{font:inherit}
