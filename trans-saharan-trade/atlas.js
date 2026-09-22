@@ -30,6 +30,9 @@ const legs=[
  {year:1352,end:1353,title:'Across the Sahara to Mali',color:'#ffb260',stops:'sijilmasa taghaza walata mali',text:'A winter caravan carries him through Taghaza’s salt mines and Walata to Mansa Sulayman’s court. The court marker indicates a region, not an established capital location.'},
  {year:1353,end:1354,title:'The Niger and the return crossing',color:'#ff8989',stops:'mali timbuktu gao takedda tuat sijilmasa fez',text:'He visits Timbuktu, Gao and Takedda, then crosses the Sahara back to Morocco, arriving in Fez in early 1354. Takedda is plotted approximately.'}
 ];
+locations.suakin=[37.33,19.1];
+legs.push({year:1330,end:1331,title:'Red Sea: landfall near Suakin',color:'#8bc7ff',stops:'suakin',text:'On the voyage from Jeddah, bad weather forces a landing north of Suakin. He reaches Suakin by camel and later sails to Yemen. The exact landing site is uncertain; no precise point is invented.',sea:true});
+legs.sort((a,b)=>a.year-b.year);
 const geographicWorld=document.querySelector('#mapWorld');
 // Preserve the existing accessible market markers and their event handlers.
 const marketLayer=document.querySelector('.city-layer');
@@ -82,8 +85,8 @@ legs.forEach((leg,i)=>{
  const points=leg.stops.split(' ').map(k=>locations[k]);
  // Coastal sailing waypoints avoid drawing the East African sea route across the Horn.
  let routePoints=points;
- if(i===2) routePoints=[points[0],[45,12.5],[49,12.4],[51.8,10.5],[51,8],[48,4],points[1],[43,0],[41,-2],points[2],[40.5,-6],points[3]];
- if(i===4) routePoints=[points[0],[28,34],[20,35],[14,37],points[1],[10,38],[5,38],...points.slice(2)];
+ if(leg.stops.startsWith('zeila')) routePoints=[points[0],[45,12.5],[49,12.4],[51.8,10.5],[51,8],[48,4],points[1],[43,0],[41,-2],points[2],[40.5,-6],points[3]];
+ if(leg.stops.startsWith('alexandria tunis')) routePoints=[points[0],[28,34],[20,35],[14,37],points[1],[10,38],[5,38],...points.slice(2)];
  const p=svgElement('path',{d:linePath(routePoints),stroke:leg.color,'data-leg':i,fill:'none','stroke-width':2.5,'stroke-dasharray':leg.sea?'7 5':'none'},journeyGroup);
  svgElement('title',{},p,leg.title);
  points.forEach((point,n)=>{
@@ -91,6 +94,11 @@ legs.forEach((leg,i)=>{
   svgElement('title',{},dot,leg.stops.split(' ')[n]+' · '+leg.year+'–'+leg.end);
  });
 });
+const stopLabels=svgElement('g',{'class':'journey-stop-labels'},geographicWorld);
+for(const key of ['tangier','tunis','alexandria','suakin','zeila','mogadishu','mombasa','kilwa','walata','takedda']){
+ const [x,y]=projectPoint(locations[key]);
+ svgElement('text',{x:x+7,y:y-7},stopLabels,key[0].toUpperCase()+key.slice(1));
+}
 document.querySelector('#tradeMap').setAttribute('viewBox','80 0 800 760');
 document.querySelector('#mapDesc').textContent='Geographic map of the entire African mainland and Madagascar, with accurately positioned markets and reconstructed historical journeys.';
 const panel=document.createElement('section');panel.className='history-panel';panel.setAttribute('aria-live','polite');
@@ -127,6 +135,7 @@ let lastEra=-1;
 const oldRenderYear=renderYear;
 renderYear=function(value){
  oldRenderYear(value);
+ document.querySelectorAll('.routes path').forEach(p=>p.classList.remove('active-route'));
  const year=Number(value);let idx=eras.findLastIndex(e=>year>=e[0]);
  if(idx!==lastEra){
   document.querySelector('#eraDate').textContent=eras[idx][0]+' CE';
@@ -135,6 +144,7 @@ renderYear=function(value){
   if(lastEra!==-1 && playing){setPlaying(false);panel.classList.add('era-popup');}
   lastEra=idx;
  }
+ eventLine.textContent=eras[idx][1];
  journeyGroup.querySelectorAll('[data-leg]').forEach(el=>{const leg=legs[Number(el.dataset.leg)];el.style.opacity=document.querySelector('#showAllJourneys').checked?'0.8':year>=leg.year?'0.9':'0';});
 };
 document.querySelector('#continueEra').onclick=()=>{panel.classList.remove('era-popup');setPlaying(true);};
