@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="An interactive map of trans-Saharan trade, 1200-1450 CE, based on student group research.">
+  <title>Across the Sahara | 1200-1450 CE</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#map" aria-label="Across the Sahara home">
+      <span class="brand-mark">AS</span>
+      <span><strong>Across the Sahara</strong><small>1200-1450 CE</small></span>
+    </a>
+    <nav aria-label="Page navigation">
+      <a href="#map">Map</a><a href="#story">How trade worked</a><a href="#sources">Sources</a>
+    </nav>
+    <button class="sound-toggle" id="motionToggle" type="button" aria-pressed="false">Reduce motion</button>
+  </header>
+
+  <main>
+    <section class="hero" id="map">
+      <div class="hero-copy">
+        <p class="eyebrow">An interactive journey across medieval Africa</p>
+        <h1>Trade moved more than <em>gold &amp; salt.</em></h1>
+        <p class="dek">Follow camel caravans across the Sahara. Pause anywhere from 1200 to 1450 CE, then open a market to inspect the goods, ideas, and people moving through it.</p>
+        <div class="hero-actions">
+          <button class="primary" id="startJourney" type="button">Begin the journey <span>→</span></button>
+          <span class="hint"><kbd>Space</kbd> play / pause</span>
+        </div>
+      </div>
+
+      <div class="atlas-shell" id="atlasShell">
+        <div class="map-toolbar">
+          <div class="year-lockup"><span id="yearDisplay">1200</span><small>CE</small></div>
+          <div class="map-instruction"><span class="pulse-dot"></span><span id="statusText">Select a market to explore</span></div>
+          <button class="reset-view" id="resetView" type="button" hidden>Reset map</button>
+        </div>
+
+        <div class="map-viewport" id="mapViewport">
+          <svg id="tradeMap" viewBox="0 0 1000 780" role="img" aria-labelledby="mapTitle mapDesc">
+            <title id="mapTitle">Interactive map of trans-Saharan trade routes</title>
+            <desc id="mapDesc">A stylized bird's-eye map of Africa showing cities, trade routes, rivers, empires, and animated camel caravans from 1200 to 1450 CE.</desc>
+            <defs>
+              <linearGradient id="ocean" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#153c43"/><stop offset="1" stop-color="#071e24"/></linearGradient>
+              <linearGradient id="land" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#dac38f"/><stop offset=".46" stop-color="#bd9f63"/><stop offset="1" stop-color="#507458"/></linearGradient>
+              <linearGradient id="sahara" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#dfc987" stop-opacity=".96"/><stop offset="1" stop-color="#c29952" stop-opacity=".65"/></linearGradient>
+              <pattern id="dunes" width="46" height="24" patternUnits="userSpaceOnUse"><path d="M0 18 Q12 5 24 18 T48 18" fill="none" stroke="#7c572c" stroke-opacity=".12" stroke-width="2"/></pattern>
+              <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#001316" flood-opacity=".45"/></filter>
+              <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+              <clipPath id="africaClip"><path d="M178 91 L250 45 397 30 523 49 665 35 806 70 886 135 873 199 820 240 792 318 752 376 735 460 700 522 671 620 620 724 558 751 518 700 484 632 451 553 405 488 356 423 304 379 244 342 179 292 130 225 111 159 Z"/></clipPath>
+              <path id="camelPathWest" d="M205 130 C292 183 353 246 440 365 S511 475 535 505"/>
+              <path id="camelPathCentral" d="M530 84 C518 164 560 224 620 296 S621 405 585 482"/>
+              <path id="camelPathEast" d="M780 126 C730 188 711 262 677 346 S635 430 585 482"/>
+              <symbol id="camel" viewBox="0 0 48 30">
+                <path d="M4 19c5 0 7-6 10-10 3-5 7-5 10 0 3-6 7-6 11-1l4 7 5-1 1 4-7 2-5-6-1 13h-4l-1-11h-8l-3 11h-4l1-12-5 7H4z" fill="currentColor"/>
+                <circle cx="43" cy="13" r="2.2" fill="currentColor"/>
+              </symbol>
+            </defs>
+
+            <rect width="1000" height="780" fill="url(#ocean)"/>
+            <g class="map-grid" opacity=".16"><path d="M0 156H1000M0 312H1000M0 468H1000M0 624H1000M200 0V780M400 0V780M600 0V780M800 0V780"/></g>
+            <g id="mapWorld">
+              <path class="africa-shadow" d="M178 91 L250 45 397 30 523 49 665 35 806 70 886 135 873 199 820 240 792 318 752 376 735 460 700 522 671 620 620 724 558 751 518 700 484 632 451 553 405 488 356 423 304 379 244 342 179 292 130 225 111 159 Z"/>
+              <path class="africa" d="M178 91 L250 45 397 30 523 49 665 35 806 70 886 135 873 199 820 240 792 318 752 376 735 460 700 522 671 620 620 724 558 751 518 700 484 632 451 553 405 488 356 423 304 379 244 342 179 292 130 225 111 159 Z"/>
+              <g clip-path="url(#africaClip)">
+                <rect x="90" y="48" width="810" height="332" fill="url(#sahara)"/>
+                <rect x="90" y="62" width="810" height="315" fill="url(#dunes)"/>
+                <path class="sahel-band" d="M90 355 Q320 305 520 354 T910 340 L910 470 Q700 434 510 459 T90 448Z"/>
+                <path class="forest-band" d="M160 465 Q340 420 501 489 T778 483 L710 622 Q541 572 420 548 T244 534Z"/>
+                <ellipse cx="541" cy="337" rx="230" ry="96" fill="#f2ce68" opacity=".12" filter="url(#soft)"/>
+              </g>
+
+              <g class="terrain-labels" aria-hidden="true">
+                <text x="494" y="245">S A H A R A</text><text x="350" y="436">S A H E L</text><text x="684" y="585">CENTRAL AFRICA</text>
+              </g>
+              <g class="rivers">
+                <path d="M337 497 C356 467 394 453 430 462 C470 475 494 455 510 428 C474 438 438 424 420 405"/>
+                <path d="M702 75 C694 156 676 220 692 276 C708 336 724 384 710 443"/>
+              </g>
+              <g class="empire empire-ghana" data-start="1200" data-end="1235"><path d="M282 411 Q346 365 411 399 L432 472 Q352 498 274 458Z"/><text x="347" y="433">GHANA</text></g>
+              <g class="empire empire-mali" data-start="1235" data-end="1430"><path d="M266 405 Q353 348 510 381 L551 489 Q433 528 283 477Z"/><text x="404" y="438">MALI EMPIRE</text></g>
+              <g class="empire empire-songhai" data-start="1400" data-end="1450"><path d="M478 387 Q545 346 620 383 L626 494 Q548 515 476 475Z"/><text x="549" y="429">SONGHAI</text></g>
+
+              <g class="routes" aria-label="Trade routes">
+                <path id="routeWest" d="M205 130 C292 183 353 246 440 365 S511 475 535 505"/>
+                <path id="routeCentral" d="M530 84 C518 164 560 224 620 296 S621 405 585 482"/>
+                <path id="routeEast" d="M780 126 C730 188 711 262 677 346 S635 430 585 482"/>
+                <path id="routeWest2" d="M206 130 C214 217 267 286 351 405"/>
+                <path id="riverRoute" d="M351 405 C401 413 460 425 535 505"/>
+              </g>
+
+              <g class="caravans" aria-hidden="true">
+                <g class="caravan caravan-a"><use href="#camel" width="34" height="22" x="-17" y="-11"/><animateMotion dur="16s" repeatCount="indefinite" rotate="auto"><mpath href="#camelPathWest"/></animateMotion></g>
+                <g class="caravan caravan-b"><use href="#camel" width="30" height="19" x="-15" y="-10"/><animateMotion dur="19s" begin="-7s" repeatCount="indefinite" rotate="auto"><mpath href="#camelPathCentral"/></animateMotion></g>
+                <g class="caravan caravan-c"><use href="#camel" width="28" height="18" x="-14" y="-9"/><animateMotion dur="21s" begin="-12s" repeatCount="indefinite" rotate="auto"><mpath href="#camelPathEast"/></animateMotion></g>
+              </g>
+
+              <g class="city-layer">
+                <g class="market" role="button" tabindex="0" data-market="sijilmasa" transform="translate(205 130)" aria-label="Open Sijilmasa market"><circle r="15"/><circle r="5"/><text x="0" y="-24">SIJILMASA</text></g>
+                <g class="market" role="button" tabindex="0" data-market="taghaza" transform="translate(440 365)" aria-label="Open Taghaza market"><circle r="15"/><circle r="5"/><text x="0" y="-24">TAGHAZA</text></g>
+                <g class="market featured" role="button" tabindex="0" data-market="timbuktu" transform="translate(535 505)" aria-label="Open Timbuktu market"><circle r="18"/><circle r="6"/><text x="0" y="-27">TIMBUKTU</text></g>
+                <g class="market" role="button" tabindex="0" data-market="gao" transform="translate(585 482)" aria-label="Open Gao market"><circle r="15"/><circle r="5"/><text x="0" y="-24">GAO</text></g>
+                <g class="market" role="button" tabindex="0" data-market="jenne" transform="translate(509 544)" aria-label="Open Jenne market"><circle r="15"/><circle r="5"/><text x="-2" y="29">JENNE</text></g>
+                <g class="market" role="button" tabindex="0" data-market="koumbi" transform="translate(351 435)" aria-label="Open Koumbi-Saleh market"><circle r="15"/><circle r="5"/><text x="0" y="-24">KOUMBI-SALEH</text></g>
+                <g class="market" role="button" tabindex="0" data-market="cairo" transform="translate(780 126)" aria-label="Open Cairo market"><circle r="15"/><circle r="5"/><text x="0" y="-24">CAIRO</text></g>
+              </g>
+            </g>
+          </svg>
+
+          <aside class="map-legend" aria-label="Map legend">
+            <span><i class="legend-line"></i>Caravan route</span><span><i class="legend-river"></i>River</span><span><i class="legend-city"></i>Market city</span>
+          </aside>
+          <div class="map-controls" aria-label="Timeline controls">
+            <button class="play-button" id="playButton" type="button" aria-label="Play timeline"><span class="play-icon"></span></button>
+            <div class="timeline-wrap">
+              <div class="timeline-labels"><span>1200</span><span>1250</span><span>1300</span><span>1350</span><span>1400</span><span>1450</span></div>
+              <input id="yearSlider" type="range" min="1200" max="1450" step="1" value="1200" aria-label="Year from 1200 to 1450 CE">
+              <div class="event-line" id="eventLine">Ghana's influence continues as regional trade networks deepen.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="story" id="story">
+      <div class="section-heading"><p class="eyebrow">The system behind the journey</p><h2>A network engineered for distance</h2><p>Trade flourished because technologies, financial practices, and states worked together across an extreme landscape.</p></div>
+      <div class="story-grid">
+        <article><span class="story-number">01</span><div class="story-icon">⌁</div><h3>Camels &amp; caravans</h3><p>Camels could travel far with little water and carry heavier loads. Saddles distributed weight; organized caravans improved efficiency and protection.</p></article>
+        <article><span class="story-number">02</span><div class="story-icon">◇</div><h3>Credit &amp; currency</h3><p>Credit let merchants deposit money and withdraw it elsewhere. Gold and salt served long-distance exchange; cowrie shells supported local trade.</p></article>
+        <article><span class="story-number">03</span><div class="story-icon">♜</div><h3>States &amp; security</h3><p>Ghana, Mali, and Songhai taxed trade, protected routes, maintained armies, and supported lodging and markets for visiting merchants.</p></article>
+      </div>
+    </section>
+
+    <section class="exchange" aria-label="What traveled">
+      <div><p class="eyebrow">What traveled</p><h2>Commodities crossed the desert.<br>Ideas crossed with them.</h2></div>
+      <div class="exchange-chips"><span>Gold</span><span>Salt</span><span>Horses</span><span>Cloth</span><span>Ivory</span><span>Ironware</span><span>Grain</span><span>Books</span><span>Islamic scholarship</span><span>Languages</span></div>
+    </section>
+
+    <section class="sources" id="sources">
+      <div><p class="eyebrow">Research note</p><h2>Built from the group’s work</h2></div>
+      <div class="source-copy"><p>The market descriptions and historical timeline synthesize the attached “Trans-Saharan Trade” group document. The experience emphasizes the group’s research on transportation, commerce, empire, cities, exchanged goods, cultural diffusion, disease, and a Moroccan diplomat’s account of West Africa.</p><p class="source-caution">Routes and boundaries are intentionally schematic: they show connections and changing influence, not modern borders or precise territorial claims.</p><p class="byline">Research by Nisa, Vasily, Derek, Jocelyn &amp; Hailey · Interactive adaptation</p></div>
+    </section>
+  </main>
+
+  <dialog class="market-dialog" id="marketDialog">
+    <button class="dialog-close" id="dialogClose" type="button" aria-label="Close market">×</button>
+    <div class="market-scene" id="marketScene" aria-hidden="true">
+      <span class="canopy canopy-one"></span><span class="canopy canopy-two"></span><span class="basket basket-one"></span><span class="basket basket-two"></span><span class="market-sun"></span>
+    </div>
+    <div class="dialog-content">
+      <p class="eyebrow" id="marketRegion">Market city</p>
+      <div class="dialog-title-row"><h2 id="marketName">Timbuktu</h2><span id="marketYears">1200-1450 CE</span></div>
+      <p class="market-lede" id="marketLede"></p>
+      <div class="market-columns">
+        <section><h3>On the market floor</h3><div class="goods-grid" id="goodsGrid"></div></section>
+        <section><h3>Why this place mattered</h3><p id="marketWhy"></p><div class="fact-card"><span>Exchange beyond goods</span><p id="marketIdea"></p></div></section>
+      </div>
+      <blockquote id="marketQuote" hidden></blockquote>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
