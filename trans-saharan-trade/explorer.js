@@ -24,10 +24,12 @@
   popup.querySelector('button').onclick=closeInfo;
   window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!popup.hidden){closeInfo();e.stopPropagation();}});
   function showInfo(title,eyebrow,html,focus=true){
+    if(window.atlasSlidesQuietUntil>performance.now())return;
     setPlaying(false);if(popup.hidden)focusBefore=document.activeElement;
     body.innerHTML='<p class="eyebrow">'+eyebrow+'</p><h2 id="popupTitle">'+title+'</h2>'+html;
     popup.hidden=false;popup.scrollTop=0;
     if(focus)popup.querySelector('button').focus({preventScroll:true});
+    queueMicrotask(()=>sim.dispatchEvent(new CustomEvent('atlas:info',{detail:{title,eyebrow}})));
   }
   const source=(url,label)=>'<p class="source-link">Source: <a href="'+url+'" target="_blank" rel="noopener">'+label+'</a></p>';
   const leoURL='https://sourcebooks.web.fordham.edu/med/leo_afri.asp';
@@ -43,6 +45,7 @@
   function setView(v){view=v;tradeMap.setAttribute('viewBox',v.join(' '));}
   function zoom(f){const w=Math.max(150,Math.min(1200,view[2]*f)),h=w*760/800;setView([view[0]+(view[2]-w)/2,view[1]+(view[3]-h)/2,w,h]);}
   function focusPoint(point){const [x,y]=projectPoint(point);setView([x-130,y-190,620,589]);}
+  sim.addEventListener('atlas:set-view',e=>{if(e.detail.point)focusPoint(e.detail.point);else setView([80,0,800,760]);});
   document.querySelector('#zoomIn').onclick=()=>zoom(.72);
   document.querySelector('#zoomOut').onclick=()=>zoom(1/.72);
   document.querySelector('#fitAfrica').onclick=()=>setView([80,0,800,760]);
@@ -155,7 +158,7 @@
   }
   layers.querySelectorAll('input').forEach(input=>input.addEventListener('change',()=>{updateLayers();if(input.dataset.layer==='musa'&&input.checked)showInfo('Mansa Musa’s pilgrimage','1324–1325 · reference route visible at every year',musaText);if(input.dataset.layer==='culture'&&input.checked)showInfo('Communities across the ocean','Culture & diaspora · long-term processes',cultureText+'<p><strong>Map legend:</strong> mint lines = cultural and merchant connections; pink lines = forced migration. Dashed movement is illustrative, not a population count. Community rings mark established settlements; no invented founding dates are assigned.</p>');}));
   let currentEra=-1;
-  function eraCard(){const e=eras.findLast(e=>Number(slider.value)>=e[0]);showInfo(e[1],e[0]+' CE · timeline event','<p>'+e[2]+'</p><button class="popup-action" id="resumeMap">Continue timeline →</button>',false);document.querySelector('#resumeMap').onclick=()=>{closeInfo();setPlaying(true);};}
+  function eraCard(){if(window.atlasSlidesQuietUntil>performance.now())return;const e=eras.findLast(e=>Number(slider.value)>=e[0]);showInfo(e[1],e[0]+' CE · timeline event','<p>'+e[2]+'</p><button class="popup-action" id="resumeMap">Continue timeline →</button>',false);document.querySelector('#resumeMap').onclick=()=>{closeInfo();setPlaying(true);};}
   document.querySelector('#showEra').onclick=eraCard;
   const renderPrevious=renderYear;renderYear=function(value){const wasPlaying=playing;renderPrevious(value);updateLayers();const idx=eras.findLastIndex(e=>Number(value)>=e[0]);if(currentEra!==-1&&idx!==currentEra){eraCard();if(!wasPlaying)setPlaying(false);}currentEra=idx;};
   const playPrevious=setPlaying;setPlaying=function(next){if(next)popup.hidden=true;playPrevious(next);sim.classList.toggle('sim-playing',next);};
