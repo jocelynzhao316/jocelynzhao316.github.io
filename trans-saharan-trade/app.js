@@ -156,7 +156,7 @@ document.querySelector('#motionToggle').addEventListener('click', event => {
   if (reduced) setPlaying(false);
 });
 window.addEventListener('keydown', event => {
-  if (event.code === 'Space' && !dialog.open && event.target.tagName !== 'INPUT') { event.preventDefault(); setPlaying(!playing); }
+  if (event.code === 'Space' && !dialog.open && !event.target.closest('button,input,select,a,[role="button"],[role="dialog"]')) { event.preventDefault(); setPlaying(!playing); }
   if (event.key === 'Escape' && dialog.open) closeMarket();
 });
 
