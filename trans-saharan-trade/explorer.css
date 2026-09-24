@@ -1,0 +1,46 @@
+.simulation{position:relative;background:#0a282e;border:1px solid #47615c;border-radius:18px;overflow:hidden;isolation:isolate}
+.atlas-shell{filter:none}
+.simulation .map-toolbar{gap:12px;flex-wrap:wrap;padding:14px 18px;height:auto;min-height:60px;flex-shrink:0}
+.simulation button,.simulation select{font:inherit}
+.simulation button:focus-visible,.simulation input:focus-visible,.simulation select:focus-visible,.simulation [role=button]:focus-visible{outline:3px solid #ffcc68;outline-offset:3px}
+.sim-actions{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+.sim-actions button,.layer-tools button,.popup-action{background:#234840;border:1px solid #67877c;border-radius:7px;padding:8px 10px;color:#fff3d7;cursor:pointer;font-size:12px}
+.layer-tools{padding:12px 16px;background:#102f33;border-block:1px solid #41605c;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px}
+.layer-tools label{display:flex;gap:5px;align-items:center;cursor:pointer}
+.layer-tools input{accent-color:#efbb55}
+.layer-tools select{background:#183f3e;border:1px solid #759187;color:#fff4d9;padding:7px;max-width:190px;border-radius:6px}
+.simulation .map-viewport{position:relative;aspect-ratio:800/760!important;margin:0!important;overflow:hidden!important;min-height:380px!important;background:#103039}
+.simulation #tradeMap{display:block;touch-action:none;cursor:grab;max-height:none}
+.simulation #tradeMap:active{cursor:grabbing}
+.simulation .map-controls{position:relative!important;margin:0!important;padding:14px 18px;background:#09262c;border-top:1px solid #3d5c57;z-index:2}
+.simulation .map-legend{position:absolute;bottom:8px!important;left:8px;right:auto;max-width:calc(100% - 16px);pointer-events:none}
+.sim-note{font-size:11px;line-height:1.5;color:#c0d1c5;margin:0;padding:9px 16px;background:#0b272c}
+.map-popup{position:absolute;right:12px;top:12px;width:min(355px,calc(100% - 24px));max-height:calc(100% - 62px);overflow:auto;z-index:8;background:#f4ecd9;color:#213d35;border:1px solid #d2b471;border-radius:12px;box-shadow:0 16px 48px #001b;overscroll-behavior:contain;padding:22px;font-size:13px;line-height:1.65}
+.map-popup[hidden]{display:none}
+.map-popup h2{font-size:27px;line-height:1.15;margin:8px 28px 12px 0;letter-spacing:-.03em;color:#173a34}
+.map-popup h3{font-size:16px;margin:20px 0 7px;color:#224c40}
+.map-popup p{margin:9px 0}
+.map-popup .eyebrow{font-size:10px;color:#80511b;letter-spacing:.12em;margin:0 30px 5px 0}
+.popup-close{position:sticky;top:0;float:right;margin:-12px -10px 0 5px;background:#173d35;border:0;border-radius:50%;color:#fff;font-size:23px!important;width:32px;height:32px;cursor:pointer;z-index:2}
+.map-popup a{color:#225a68;text-decoration:underline}
+.map-popup ul{padding-left:19px}
+.later-account{background:#e4dbc3;border-left:4px solid #a2752c;padding:12px;margin:14px 0}
+.later-account h3{margin-top:0}
+.market-illustration{background:linear-gradient(#d1e4dc,#ede0bb);border-radius:8px;overflow:hidden;margin:12px 0}
+.market-illustration svg{width:100%!important;height:auto!important;display:block}
+.market-goods{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.market-goods span{background:#e2dcc8;padding:5px 8px;border-radius:5px;font-size:12px}
+.map-layer-label{font:10px Manrope,system-ui;fill:#fff6d8;paint-order:stroke;stroke:#153b35;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.empire-label{font:bold 10px Manrope,system-ui;fill:#fff9e0;paint-order:stroke;stroke:#203d37;stroke-width:3px;pointer-events:none}
+.atlas-feature{cursor:pointer}.atlas-feature:focus{outline:none}.atlas-feature:focus .feature-ring{stroke:#fff;stroke-width:3}
+.atlas-feature text{pointer-events:none}.flow-line{fill:none;stroke-width:2;stroke-dasharray:6 5;opacity:.85;pointer-events:none}
+.sim-playing .flow-line{animation:flow 2.5s linear infinite}.reduced-motion .flow-line{animation:none}
+@keyframes flow{to{stroke-dashoffset:-44}}
+.simulation:fullscreen,.simulation.expanded{width:100vw;height:100dvh;max-width:none;border:0;border-radius:0;display:flex;flex-direction:column;background:#09262c}
+.simulation.expanded{position:fixed;inset:0;z-index:100}
+.simulation:fullscreen .map-viewport,.simulation.expanded .map-viewport{flex:1;min-height:0!important;aspect-ratio:auto!important}
+.simulation:fullscreen #tradeMap,.simulation.expanded #tradeMap{height:100%!important;width:100%!important}
+.simulation:fullscreen .map-controls,.simulation.expanded .map-controls{flex-shrink:0}
+.simulation .reset-view{display:none}
+.atlas-shell>.history-panel{display:none!important}
+@media(max-width:700px){.layer-tools{gap:9px;padding:10px;font-size:11px}.sim-actions button{padding:7px}.map-popup{max-height:calc(100% - 46px);padding:17px;width:min(320px,calc(100% - 24px))}.simulation .map-toolbar{padding:10px}.simulation .map-controls{padding:10px}.sim-note{font-size:10px}.simulation:fullscreen .sim-note,.simulation.expanded .sim-note{display:none}}
