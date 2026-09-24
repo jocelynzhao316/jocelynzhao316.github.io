@@ -81,4 +81,32 @@
   info.querySelector('.popup-close').addEventListener('click',()=>info.classList.remove('popup-expanded'));
   window.addEventListener('keydown',e=>{if(card.hidden)return;if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();if(card.classList.contains('slide-expanded'))resetExpansion();else resumeMap();}},true);
   addPopupControls();
+  // The slide numbers stay independent of the optional historical map layers.
+  const numbered=svgElement('g',{class:'numbered-slides','aria-label':'Slides in presentation order'},geographicWorld);
+  const badgePoints=[[-17,32],[5,27],[-7,34],[-15,19],[-6,20],[3,18],[-16,11],[-1,10],[43,-5],[-8,6],[35,32]];
+  const strip=document.createElement('details');strip.className='slide-index';
+  strip.innerHTML='<summary>Click map numbers 1–11 · slide order & titles</summary><div class="slide-index-buttons"></div><p>Numbers follow your slides, not travel chronology. Lines connect spaced-out badges to their topic locations; slide 1 is the whole-map introduction.</p>';
+  bar.append(strip);
+  slides.forEach((s,i)=>{
+    const [x,y]=projectPoint(badgePoints[i]);
+    if(s[3]){const [tx,ty]=projectPoint(s[3]);svgElement('path',{d:'M'+x+','+y+' L'+tx+','+ty,class:'slide-pin-leader'},numbered);}
+    const g=svgElement('g',{transform:'translate('+x+' '+y+')',class:'slide-pin',role:'button',tabindex:0,'aria-label':'Slide '+(i+1)+': '+s[0]},numbered);
+    svgElement('circle',{r:20,fill:'transparent'},g);
+    svgElement('circle',{r:14,class:'slide-pin-disc'},g);
+    svgElement('text',{x:0,y:5,'text-anchor':'middle'},g,String(i+1));
+    svgElement('title',{},g,'Slide '+(i+1)+' · '+s[0]);
+    g.addEventListener('click',()=>showSlide(i));
+    g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();showSlide(i);}});
+    const b=document.createElement('button');b.textContent=(i+1)+'. '+s[0];b.onclick=()=>showSlide(i);strip.querySelector('div').append(b);
+  });
+  // A separate document viewer for the class's seven concluding slides.
+  const pdf=document.createElement('section');pdf.className='pdf-presentation';pdf.setAttribute('aria-labelledby','pdfPresentationTitle');
+  pdf.innerHTML='<header><div><p class="eyebrow">After the simulation · 7 slides</p><h2 id="pdfPresentationTitle">Ibn Battuta: our final slides</h2></div><button id="fullscreenPdf" aria-pressed="false">⛶ Fullscreen PDF</button><a href="presentation/ibn-battuta-slides.pdf" target="_blank" rel="noopener">Open PDF ↗</a></header><iframe title="Ibn Battuta final presentation PDF, seven pages" src="presentation/ibn-battuta-slides.pdf#view=FitH" loading="lazy"></iframe><p class="pdf-help">Scroll through the seven pages using the PDF viewer. If your browser does not display it, choose Open PDF.</p>';
+  sim.after(pdf);
+  const pdfFull=pdf.querySelector('#fullscreenPdf');let oldOverflow='';
+  function pdfState(){const on=document.fullscreenElement===pdf||pdf.classList.contains('pdf-expanded');pdfFull.textContent=on?'⤡ Exit PDF fullscreen':'⛶ Fullscreen PDF';pdfFull.setAttribute('aria-pressed',String(on));}
+  function closePdfFallback(){pdf.classList.remove('pdf-expanded');document.body.style.overflow=oldOverflow;pdfState();pdfFull.focus();}
+  pdfFull.onclick=async()=>{setPlaying(false);if(document.fullscreenElement===pdf){await document.exitFullscreen();}else if(pdf.classList.contains('pdf-expanded'))closePdfFallback();else{try{if(!pdf.requestFullscreen)throw Error('unsupported');await pdf.requestFullscreen();}catch{oldOverflow=document.body.style.overflow;document.body.style.overflow='hidden';pdf.classList.add('pdf-expanded');}}pdfState();};
+  document.addEventListener('fullscreenchange',pdfState);
+  window.addEventListener('keydown',e=>{if(e.key==='Escape'&&pdf.classList.contains('pdf-expanded')){closePdfFallback();}});
 })();
