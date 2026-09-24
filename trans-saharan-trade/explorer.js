@@ -24,7 +24,6 @@
   popup.querySelector('button').onclick=closeInfo;
   window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!popup.hidden){closeInfo();e.stopPropagation();}});
   function showInfo(title,eyebrow,html,focus=true){
-    if(window.atlasSlidesQuietUntil>performance.now())return;
     setPlaying(false);if(popup.hidden)focusBefore=document.activeElement;
     body.innerHTML='<p class="eyebrow">'+eyebrow+'</p><h2 id="popupTitle">'+title+'</h2>'+html;
     popup.hidden=false;popup.scrollTop=0;

@@ -69,7 +69,7 @@
     if(/Sahara|caravan|crossing/i.test(title))return 1;
     return null;
   }
-  sim.addEventListener('atlas:info',e=>{if(!card.hidden)return;const i=topicSlide(e.detail.title);if(enabled.checked&&i!==null)showSlide(i,true);else addPopupControls();});
+  sim.addEventListener('atlas:info',e=>{const i=topicSlide(e.detail.title);if(enabled.checked&&i!==null)showSlide(i,true);else {closeSlide();addPopupControls();}});
   function addPopupControls(){
     if(info.querySelector('.popup-utilities'))return;
     const row=document.createElement('div');row.className='popup-utilities';
