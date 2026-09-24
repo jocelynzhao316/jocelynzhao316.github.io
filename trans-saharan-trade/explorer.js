@@ -73,7 +73,7 @@
     svgElement('circle',{r:11,fill:'#123b36',stroke:color,'stroke-width':1.5,class:'feature-ring'},g);
     svgElement('text',{x:0,y:5,'text-anchor':'middle','font-size':15},g,icon);
     if(label)svgElement('text',{x:0,y:labelY,'text-anchor':'middle',class:'map-layer-label'},g,label);
-    function activate(){if(moved){moved=false;return;}showInfo(label,eyebrow,html);}
+    function activate(){showInfo(label,eyebrow,html);}
     g.onclick=activate;g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();activate();}};
     return g;
   }
@@ -82,7 +82,13 @@
     {name:'Mali Empire',point:[-9,9],points:[[-15,14],[-11,17],[-5,18],[0,16],[-4,12],[-8,10],[-12,11]],color:'#eec45f',text:'From the thirteenth century, Mali linked the upper Niger and western Sahel to Saharan exchange. Gold-producing regions and trade taxation supported its rulers. The shaded zone is an approximate core and trade sphere, not a maximal empire boundary. Influence changed over time and did not mean uniform control.'},
     {name:'Songhai / Gao',point:[4,19],points:[[-1,18],[3,18],[4,15],[1,13],[-1,15]],color:'#9ba5ed',text:'Gao was the center of a long-established Songhai polity, at times under Mali’s influence. It became more independent as Mali weakened. The vast Songhai Empire associated with Sunni Ali (from 1464) and Askia Muhammad lies after 1450; this map shows its earlier Gao-centered core, not that later empire.'}
   ];
-  empireData.forEach((d,i)=>{const p=svgElement('path',{d:linePath(d.points)+' Z',fill:d.color,'fill-opacity':'.19',stroke:d.color,'stroke-width':1.5,'stroke-dasharray':'4 4','data-core':i,'pointer-events':'none'},groups.empires);svgElement('title',{},p,d.name+' · approximate core');feature(groups.empires,d.point,d.name,'',d.color,'<p>'+d.text+'</p><p><strong>Map key:</strong> dashed shading locates a historical heartland; muted shading indicates an earlier or emerging state.</p>'+source(goldURL,'The Met · trans-Saharan gold trade'),'Approximate heartland · changing political influence',0);});
+  const empireLabelPoints=[[-11,21],[-14,4],[6,23]];
+  const empireNames=['Ghana Empire · legacy','Mali Empire','Songhai · Gao core'];
+  empireData.forEach((d,i)=>{const p=svgElement('path',{d:linePath(d.points)+' Z',fill:d.color,'fill-opacity':'.19',stroke:d.color,'stroke-width':1.5,'stroke-dasharray':'4 4','data-core':i,'pointer-events':'none'},groups.empires);svgElement('title',{},p,d.name+' · approximate core');
+    svgElement('path',{d:linePath([empireLabelPoints[i],d.point]),stroke:d.color,'stroke-width':1,'stroke-dasharray':'2 3','pointer-events':'none'},groups.empires);
+    const badge=feature(groups.empires,empireLabelPoints[i],empireNames[i],'',d.color,'<p>'+d.text+'</p><p><strong>Map key:</strong> dashed shading locates a historical heartland; muted shading indicates an earlier or emerging state. Songhai’s later imperial expansion begins after this timeline.</p>'+source(goldURL,'The Met · trans-Saharan gold trade'),'Approximate heartland · changing political influence',4);
+    badge.querySelector('circle').remove();const background=svgElement('rect',{x:-66,y:-10,width:132,height:20,rx:5,fill:'#173b35',stroke:d.color,'stroke-width':1},badge);badge.prepend(background);
+  });
   // Production areas are examples, never claims to identify individual mine shafts.
   const goods=[
     [[-5,23.6],'Taghaza · salt','🧂','Salt slabs were mined in the Sahara and carried south. Ibn Battuta describes enslaved workers extracting salt at Taghaza. The site depended on imported food.'],
@@ -94,7 +100,7 @@
     [[31.4,26],'Nile valley · crops','🌾','Irrigated Nile agriculture supplied grain and flax for linen. Agricultural production sustained cities and travelers; this marker identifies a producing region.'],
     [[-12,7.7],'Forced capture zones','↗','Enslaved people were not a natural commodity. Warfare, raiding and other coercive practices uprooted people from multiple regions south of the Sahara and elsewhere. This regional marker shows a broad connection, not a single origin or the boundaries of any people. Enable Culture & diaspora to follow representative forced-migration corridors.']
   ];
-  goods.forEach(([p,l,i,t])=>{const g=feature(groups.goods,p,l,i,'#f0c978','<p>'+t+'</p>'+source(l.includes('Takedda')||l.includes('Taghaza')?ibnURL:goldURL,l.includes('Takedda')||l.includes('Taghaza')?'Ibn Battuta · West Africa':'Trade context · The Met'));if(i==='🟨'){g.querySelector('text').textContent='';svgElement('path',{d:'M-8 5L-5-4 5-5 9 4 2 8Z',fill:'#efbe36',stroke:'#fff0a6','stroke-width':1},g);}});
+  goods.forEach(([p,l,i,t])=>{const g=feature(groups.goods,p,l,i,'#f0c978','<p>'+t+'</p>'+source(l.includes('Takedda')||l.includes('Taghaza')?ibnURL:goldURL,l.includes('Takedda')||l.includes('Taghaza')?'Ibn Battuta · West Africa':'Trade context · The Met'));if(l.startsWith('Taghaza')){const [x,y]=projectPoint(p);g.setAttribute('transform','translate('+(x+33)+' '+y+')');svgElement('path',{d:'M-33 0H-12',stroke:'#f0c978','pointer-events':'none'},g);}if(i==='🟨'){g.querySelector('text').textContent='';svgElement('path',{d:'M-8 5L-5-4 5-5 9 4 2 8Z',fill:'#efbe36',stroke:'#fff0a6','stroke-width':1},g);}});
   function flow(parent,points,color){return svgElement('path',{d:linePath(points),stroke:color,class:'flow-line'},parent);}
   const cultureText='<p>Swahili city-states grew from African coastal societies. Kiswahili is a Bantu language; Indian Ocean commerce and Islam connected these communities with Arabia, Persia and India.</p><p>Merchants settled, formed families and supported mosques. Local people shaped the resulting language, architecture and religious life. This was a gradual process already under way before 1200, not the founding of African cities by outsiders.</p><p>Ancient DNA from sampled coastal burials supports Persian-related ancestry mixing with African ancestry from around 1000. It does not represent every resident; Arabian-related ancestry becomes more prominent after 1500. Arab connections and settlement existed earlier, too.</p>'+source(swahiliURL,'Brielle et al., Nature (2023)');
   flow(groups.culture,[[54,26],[56,18],[53,9],[48,3],locations.mogadishu,locations.mombasa,locations.kilwa],'#6fe1cd');
